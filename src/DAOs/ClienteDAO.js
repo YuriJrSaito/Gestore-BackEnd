@@ -5,7 +5,7 @@ module.exports = class ClienteDAO
     async gravar(bd, cliente)
     {
         const sql = "INSERT INTO cliente VALUES (default, $1, $2, $3, $4, $5, $6, $7) RETURNING *";
-        var values = Object.values(cliente).slice(1);
+        var values = Object.values(cliente).slice(1); //retira o id
         try{
             const res = await bd.Client.query(sql,values);
             return res.rows[0].id;

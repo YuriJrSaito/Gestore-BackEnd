@@ -5,7 +5,7 @@ module.exports = class CargoDAO
     async gravar(bd, cargo)
     {
         const sql = "INSERT INTO cargo VALUES (default, $1) RETURNING *";
-        var values = Object.values(cargo).slice(1); //retira o id do endereco
+        var values = Object.values(cargo).slice(1); //retira o id
         try{
             const res = await bd.Client.query(sql,values);
             return res.rows;

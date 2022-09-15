@@ -16,10 +16,10 @@ class TelefoneController
     async buscarTelefone(request, response)
     {
         const {idTelefone} = request.params;
-        bd.conectar();
+        await bd.conectar();
         var telefone = new Telefone();
         const resp = await telefone.buscarTelefone(bd, idTelefone);
-        bd.Client.end();
+        await bd.Client.end();
         return response.send(resp);
     }
 

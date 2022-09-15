@@ -5,7 +5,7 @@ module.exports = class EnderecoDAO
     async gravar(bd, endereco)
     {
         const sql = "INSERT INTO endereco VALUES (default, $1, $2, $3, $4, $5, $6) RETURNING *";
-        var values = Object.values(endereco).slice(1); //retira o id do endereco
+        var values = Object.values(endereco).slice(1); //retira o id
         try{
             const res = await bd.Client.query(sql,values);
             return res.rows[0].id;

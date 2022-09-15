@@ -15,11 +15,11 @@ class EnderecoController
     async buscarEndereco(request, response)
     {
         const {idEndereco} = request.params;
-        bd.conectar();
+        await bd.conectar();
         var endereco = new Endereco();
         const resp = await endereco.buscarEndereco(bd,idEndereco);
-        bd.Client.end();
-        return response.send(resp);     
+        await bd.Client.end();
+        return response.send(resp);
     }
 
     async alterarEndereco(bd, idEndereco, rua, numero, bairro, cidade, cep, complemento)

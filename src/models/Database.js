@@ -1,5 +1,6 @@
-const { Client } = require('pg');
-module.exports = new class Database{
+const { Pool, Client } = require('pg');
+
+class Database{
     #client;
     async conectar()
     {
@@ -23,3 +24,5 @@ module.exports = new class Database{
         return this.#client; 
     }
 }
+
+module.exports = new Database;

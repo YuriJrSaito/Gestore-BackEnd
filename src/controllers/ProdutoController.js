@@ -14,10 +14,9 @@ class ProdutoController{
         var msg = "";
         bd.conectar();   
 
-
-            var resp = await produto.gravar(bd);
-            if(resp.length > 0)
-                msg = "Produto cadastrado com sucesso!!";
+        var resp = await produto.gravar(bd);
+        if(resp.length > 0)
+            msg = "Produto cadastrado com sucesso!!";
 
         bd.Client.end();
         return response.send(msg);
