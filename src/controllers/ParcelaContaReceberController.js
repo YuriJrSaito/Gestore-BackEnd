@@ -1,8 +1,8 @@
 const bd = require('../models/Database');
-const ParcelaContaPagar = require('../models/ParcelaContaPagar');
+const ParcelaContaReceber = require('../models/ParcelaContaReceber');
 const moment = require('moment');
 
-class ParcelaContaPagarController{
+class ParcelaContaReceberController{
 
     async gravarParcelas(bd, idConta, valorTotal, qtdeParcelas, dataPrimeiroVencimento)
     {
@@ -12,7 +12,6 @@ class ParcelaContaPagarController{
         var resto;
          
         valorParcela = Math.ceil(valorParcela);
-        //console.log(valorParcela);
 
         if((valorParcela * qtdeParcelas) > valorTotal)
         {
@@ -24,12 +23,12 @@ class ParcelaContaPagarController{
         {
             if(infinito == true)
             {
-                var parcela = new ParcelaContaPagar(0, valorParcela - resto, null, dataPrimeiroVencimento, i, situacao, idConta, valorParcela - resto);
+                var parcela = new ParcelaContaReceber(0, null, dataPrimeiroVencimento, i, situacao, idConta, valorParcela - resto, valorParcela - resto);
                 infinito = false;
             }   
             else
             {
-                var parcela = new ParcelaContaPagar(0, valorParcela, null, dataPrimeiroVencimento, i, situacao, idConta, valorParcela);
+                var parcela = new ParcelaContaReceber(0, null, dataPrimeiroVencimento, i, situacao, idConta, valorParcela, valorParcela);
             }   
             await parcela.gravar(bd);
             let data = moment(dataPrimeiroVencimento);
@@ -40,7 +39,7 @@ class ParcelaContaPagarController{
 
     async deletarParcelas(bd, idConta)
     {
-        var parcela = new ParcelaContaPagar();
+        var parcela = new ParcelaContaReceber();
         await parcela.deletar(bd, idConta);
 
         return false;
@@ -49,7 +48,7 @@ class ParcelaContaPagarController{
     async listarTodasParcelas(request, response)
     {
         const {idConta} = request.params;
-        var parcela = new ParcelaContaPagar();
+        var parcela = new ParcelaContaReceber();
         bd.conectar();
         const resp = await parcela.listarTodasParcelas(bd, idConta);
         bd.Client.end();
@@ -59,14 +58,14 @@ class ParcelaContaPagarController{
         }
         else
         {
-            return response.send("Não há parcelas cadastradas");
+            return response.send("Não há Parcelas Cadastradas");
         }
     }
 
     async quitarParcela(request, response)
     {
         const {idParcela} = request.params;
-        var parcela = new ParcelaContaPagar();
+        var parcela = new ParcelaContaReceber();
         bd.conectar();
         const resp = await parcela.quitarParcela(bd, idParcela);
         bd.Client.end();
@@ -79,7 +78,7 @@ class ParcelaContaPagarController{
     async pagarParcelado(request, response)
     {
         const {idParcela, valor} = request.params;
-        var parcela = new ParcelaContaPagar();
+        var parcela = new ParcelaContaReceber();
         bd.conectar();
         const resp = await parcela.pagarParcelado(bd, idParcela, valor);
         bd.Client.end();
@@ -91,4 +90,4 @@ class ParcelaContaPagarController{
     }
 }
 
-module.exports = new ParcelaContaPagarController();
+module.exports = new ParcelaContaReceberController();

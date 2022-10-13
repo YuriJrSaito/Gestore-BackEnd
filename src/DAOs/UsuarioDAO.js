@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 module.exports = class UsuarioDAO
 {
     async gravar(bd, usuario)
@@ -51,11 +53,19 @@ module.exports = class UsuarioDAO
 
     async buscarCargo(bd, idCargo)
     {
-        console.log(idCargo);
         try {
             let res = await bd.Client.query(`SELECT * from usuario where id_cargo='${idCargo}'`);
             return res.rows;              
         }
         finally{}
+    }
+
+    async procurarUsuarioAcesso(bd, idAcesso)
+    {
+        try{
+            let res = await bd.Client.query(`SELECT * from usuario where id_controle_acesso=${idAcesso}`);
+            return res.rows[0].id;
+        }
+        finally{};
     }
 }

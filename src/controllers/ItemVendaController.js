@@ -1,28 +1,38 @@
 const axios = require('axios');
 const bd = require('../models/Database');
-const Venda = require('../models/Venda');
-const UsuarioController = require('../controllers/UsuarioController');
+const ItemVenda = require('../models/ItemVenda');
+const ProdutoController = require('../controllers/ProdutoController');
 
-class VendaController{
-
+class ItemVendaController{
     async gravar(request, response)
     {
-        const {dataVenda, idContaReceber, idAcesso, idCliente} = request.body;
-        var msg = "";
+        const {produtos, idVenda} = request.body;
         bd.conectar();
+        let resp;
+        let msg = "";
 
-        let idUsuario = await UsuarioController.procurarUsuarioAcesso(bd, idAcesso);
-        var venda = new Venda(0, dataVenda, idContaReceber, idUsuario, idCliente);
+        for(let x=0; x<produtos.length; x++)
+        {   
+            if(parseInt(produtos[x].qtdeSelecionado) > 0)
+            {
+                let valor = parseInt(produtos[x].qtdeSelecionado) * parseFloat(produtos[x].valorUnitario);
+                valor = parseFloat(valor.toFixed(2));
 
-        const resp = await venda.gravar(bd);
+                let qtde = parseInt(produtos[x].qtdeEstoque) - parseInt(produtos[x].qtdeSelecionado);
 
-        if(resp > 0)
+                let itemVenda = new ItemVenda(0, produtos[x].qtdeSelecionado, valor, idVenda, produtos[x].id);
+                await itemVenda.gravar(bd);
+                await ProdutoController.controleEstoque(bd, produtos[x].id, qtde);
+            }
+        }
+
+        if(resp != false)
             msg += "Venda cadastrada com sucesso";
         else
             msg += "Algo deu errado";
 
         bd.Client.end();
-        return response.send([resp]);
+        return response.send(msg);
     }
 
     async listarTodasVendas(request, response)
@@ -94,13 +104,6 @@ class VendaController{
         bd.Client.end();
         return response.send(msg);
     }
-
-    async buscarClienteId(bd, idConta)
-    {
-        let venda = new Venda();
-        let resp = await venda.buscarClienteId(bd, idConta);
-        return resp;
-    }
 }
 
-module.exports = new VendaController();
+module.exports = new ItemVendaController();

@@ -110,6 +110,14 @@ class ClienteController{
         bd.Client.end();
         return response.send(msg); 
     }
+
+    async buscarClienteNome(bd, idCliente)
+    {
+        const cliente = new Cliente();
+        const resp = await cliente.buscarClienteNome(bd, idCliente);
+
+        return resp; 
+    }
 }
 
 module.exports = new ClienteController();

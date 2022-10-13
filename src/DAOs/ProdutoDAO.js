@@ -33,6 +33,16 @@ module.exports = class ProdutoDAO
         finally{}
     }
 
+    async controleEstoque(bd, idProduto, qtdeEstoque)
+    {
+        let sql=`UPDATE produto SET "qtdeEstoque"=${qtdeEstoque} WHERE id = ${idProduto}`;
+        try{
+            let res = await bd.Client.query(sql);
+            return res.rowCount;
+        }
+        finally{}
+    }
+
     async filtrarProdutos(bd, filtro)
     {
         try {

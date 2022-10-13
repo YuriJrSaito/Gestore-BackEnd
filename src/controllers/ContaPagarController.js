@@ -53,11 +53,11 @@ class ContaPagarController{
 
         if(resp != undefined)
         {
-            return response.send(resp);
+            return response.send(["",resp]);
         }
         else
         {
-            return response.send("Não há Contas a Pagar cadastradas");
+            return response.send(["Não há Contas a Pagar cadastradas", []]);
         }
     }
 

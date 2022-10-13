@@ -12,6 +12,10 @@ const categoriaCtrl = require('./controllers/CategoriaController.js');
 const produtoCtrl = require('./controllers/ProdutoController.js');
 const contaPagarCtrl = require('./controllers/ContaPagarController');
 const parcelaCPCtrl = require('./controllers/ParcelaContaPagarController');
+const contaReceberCtrl = require('./controllers/ContaReceberController');
+const parcelaCRCtrl = require('./controllers/ParcelaContaReceberController');
+const vendaCtrl = require('./controllers/VendaController');
+const itemVendaCtrl = require('./controllers/ItemVendaController');
 
 routes.post('/cadCliente',clienteCtrl.gravar);
 routes.put('/altCliente', clienteCtrl.alterarCliente);
@@ -69,6 +73,17 @@ routes.get('/filtrarContasPagar/:filtro', contaPagarCtrl.filtrarContas);
 
 routes.get('/buscarParcelasCP/:idConta', parcelaCPCtrl.listarTodasParcelas);
 routes.post('/quitarParcelaCP/:idParcela', parcelaCPCtrl.quitarParcela);
+routes.put('/pagarParceladoCP/:idParcela/:valor', parcelaCPCtrl.pagarParcelado);
 
+routes.post('/cadContaReceber', contaReceberCtrl.gravar);
+routes.get('/listarContasReceber',contaReceberCtrl.listarTodasContas);
+routes.delete('/deletarContaReceber/:idConta', contaReceberCtrl.deletar);
+
+routes.get('/buscarParcelasCR/:idConta', parcelaCRCtrl.listarTodasParcelas);
+routes.post('/quitarParcelaCR/:idParcela', parcelaCRCtrl.quitarParcela);
+routes.put('/pagarParceladoCR/:idParcela/:valor', parcelaCRCtrl.pagarParcelado);
+
+routes.post('/cadVenda', vendaCtrl.gravar);
+routes.post('/cadItemVenda', itemVendaCtrl.gravar);
 
 module.exports = routes;

@@ -48,4 +48,14 @@ module.exports = class VendaDAO
         }
         finally{}
     }
+
+    async buscarClienteId(bd, idConta)
+    {
+        console.log(idConta);
+        try {
+            let res = await bd.Client.query(`SELECT * from venda where "id_contaReceber" = ${idConta}`);
+            return res.rows[0].id_cliente;              
+        }
+        finally{}
+    }
 }

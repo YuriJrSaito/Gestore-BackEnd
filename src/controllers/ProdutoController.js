@@ -115,6 +115,15 @@ class ProdutoController{
         bd.Client.end();
         return response.send(resp); 
     }
+
+    async controleEstoque(bd, idProduto, qtdeEstoque)
+    {
+        let resp;
+        let produto = new Produto();
+        resp = await produto.controleEstoque(bd, idProduto, qtdeEstoque);
+
+        return resp;
+    }
 }
 
 module.exports = new ProdutoController();

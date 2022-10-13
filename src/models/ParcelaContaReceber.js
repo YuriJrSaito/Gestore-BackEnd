@@ -1,25 +1,25 @@
-const ParcelaDAO = require('../DAOs/ParcelaContaPagarDAO');
+const ParcelaDAO = require('../DAOs/ParcelaContaReceberDAO');
 
-class ParcelaContaPagar
+class ParcelaContaReceber
 {
     id;
-    valor;
     dataPagamento;
     dataVencimento;
     numParcela;
     situacao;
-    idContaPagar;
+    idContaReceber;
+    valor;
     valorTotal;
 
-    constructor(id, valor, dataPagamento, dataVencimento, numParcela, situacao, idContaPagar, valorTotal)
+    constructor(id, dataPagamento, dataVencimento, numParcela, situacao, idContaReceber, valor, valorTotal)
     {
         this.id = id;
-        this.valor = valor;
         this.dataPagamento = dataPagamento;
         this.dataVencimento = dataVencimento;
         this.numParcela = numParcela;
         this.situacao = situacao;
-        this.idContaPagar = idContaPagar;
+        this.idContaReceber = idContaReceber;
+        this.valor = valor;
         this.valorTotal = valorTotal;
     }
 
@@ -60,4 +60,4 @@ class ParcelaContaPagar
     }
 }
 
-module.exports = ParcelaContaPagar;
+module.exports = ParcelaContaReceber;

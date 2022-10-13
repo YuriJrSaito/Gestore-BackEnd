@@ -5,6 +5,7 @@ const Usuario = require('../models/Usuario');
 const TelefoneController = require('../controllers/TelefoneController');
 const EnderecoController = require('../controllers/EnderecoController');
 const ControleAcessoController = require('../controllers/ControleAcessoController');
+const { response } = require('express');
 
 class UsuarioController{
 
@@ -114,6 +115,14 @@ class UsuarioController{
 
         bd.Client.end();
         return response.send(resp); 
+    }
+
+    async procurarUsuarioAcesso(bd, idAcesso)
+    {
+        let usuario = new Usuario();
+        let resp = await usuario.procurarUsuarioAcesso(bd, idAcesso);
+
+        return resp;
     }
 }
 

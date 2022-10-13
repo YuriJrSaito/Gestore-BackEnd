@@ -56,6 +56,12 @@ class Usuario extends Pessoa
         const resp = await new UsuarioDAO().buscarCargo(bd, idCargo);
         return resp;
     }
+
+    async procurarUsuarioAcesso(bd, idAcesso)
+    {
+        let resp = await new UsuarioDAO().procurarUsuarioAcesso(bd, idAcesso);
+        return resp;
+    }
 }
 
 module.exports = Usuario;
