@@ -12,10 +12,8 @@ class ClienteController{
         const {nome, email, idade, sexo, cpf, telefones, cep, cidade, rua, bairro, numero, complemento} = request.body;
         var cliente = new Cliente();
         var msg = "";
-        bd.conectar();  
 
         var retorno = false;
-        console.log(cpf);
         if(cpf != "")
             retorno = await cliente.buscarPorCpf(bd,cpf);  
 
@@ -34,16 +32,13 @@ class ClienteController{
             msg = "Este CPF já esta cadastrado";
         }
             
-        bd.Client.end();
         return response.send(msg);
     }
 
     async listarTodosClientes(request, response)
     {
         var cliente = new Cliente();
-        bd.conectar();
         const resp = await cliente.listarTodosClientes(bd);
-        bd.Client.end();
         if(resp != undefined)
         {
             return response.send(resp);
@@ -58,9 +53,7 @@ class ClienteController{
     {
         const {filtro} = request.params;
         var cliente = new Cliente();
-        bd.conectar();
         const resp = await cliente.filtrarClientes(bd, filtro);
-        bd.Client.end();
 
         if(resp != undefined)
         {
@@ -75,7 +68,6 @@ class ClienteController{
     async alterarCliente(request, response)
     {
         const {idCliente, nome, email, idade, sexo, cpf, idTelefone, telefones, idEndereco ,cep, cidade, rua, bairro, numero, complemento} = request.body;
-        bd.conectar();
         var msg="";
 
         const respTel = await TelefoneController.alterarTelefone(bd, idTelefone, telefones);
@@ -89,14 +81,12 @@ class ClienteController{
         else
             msg+="Algo deu errado !!";
 
-        bd.Client.end();
         return response.send(msg);
     }
 
     async deletar(request, response) 
     {
         const {idCliente} = request.params;
-        bd.conectar();
         var msg="";
 
         const cliente = new Cliente();
@@ -107,7 +97,6 @@ class ClienteController{
         else
             msg+="Algo deu errado !!";
 
-        bd.Client.end();
         return response.send(msg); 
     }
 

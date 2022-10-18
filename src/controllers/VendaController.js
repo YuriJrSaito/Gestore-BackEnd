@@ -4,16 +4,12 @@ const Venda = require('../models/Venda');
 const UsuarioController = require('../controllers/UsuarioController');
 
 class VendaController{
-
     async gravar(request, response)
     {
         const {dataVenda, idContaReceber, idAcesso, idCliente} = request.body;
         var msg = "";
-        bd.conectar();
-
         let idUsuario = await UsuarioController.procurarUsuarioAcesso(bd, idAcesso);
         var venda = new Venda(0, dataVenda, idContaReceber, idUsuario, idCliente);
-
         const resp = await venda.gravar(bd);
 
         if(resp > 0)
@@ -21,16 +17,14 @@ class VendaController{
         else
             msg += "Algo deu errado";
 
-        bd.Client.end();
         return response.send([resp]);
     }
 
     async listarTodasVendas(request, response)
     {
         var venda = new Venda();
-        await bd.conectar();
         const resp = await venda.listarTodasVendas(bd);
-        await bd.Client.end();
+
         if(resp != undefined)
         {
             return await response.send(resp);
@@ -45,9 +39,7 @@ class VendaController{
     {
         const {filtro} = request.params;
         var venda = new Venda();
-        bd.conectar();
         const resp = await venda.filtrarVendas(bd, filtro);
-        bd.Client.end();
 
         if(resp != undefined)
         {
@@ -63,8 +55,6 @@ class VendaController{
     {
         var msg="";
         const {idVenda, dataVenda, idContaReceber, idUsuario, idCliente} = request.body;
-        bd.conectar();
-
         let venda = new Venda(idVenda, dataVenda, idContaReceber, idUsuario, idCliente);
         const resp = await venda.alterar(bd);
 
@@ -73,16 +63,13 @@ class VendaController{
         else
             msg+="Algo deu errado !!";
         
-        bd.Client.end();
         return response.send(msg);
     }
 
     async deletar(request, response) 
     {
         const {idVenda} = request.params;
-        bd.conectar();
         var msg="";
-
         const venda = new Venda();
         const resp = await venda.deletar(bd, idVenda);
 
@@ -91,7 +78,6 @@ class VendaController{
         else
             msg+="Algo deu errado !!";
 
-        bd.Client.end();
         return response.send(msg);
     }
 
@@ -100,6 +86,15 @@ class VendaController{
         let venda = new Venda();
         let resp = await venda.buscarClienteId(bd, idConta);
         return resp;
+    }
+
+    async buscarConta(request, response)
+    {
+        const{idConta} = request.params;
+        let venda = new Venda();
+        let resp = await venda.buscarConta(bd, idConta);
+
+        return response.send([resp]);
     }
 }
 

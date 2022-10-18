@@ -7,7 +7,6 @@ class TelefoneController
     async gravarTelefones(bd, telefones)
     {
         telefones = await this.formatarTelefones(telefones);
-    
         var telefone = new Telefone(0, telefones[0], telefones[1], telefones[2]);
         const resp = await telefone.gravar(bd);
         return resp;
@@ -16,10 +15,9 @@ class TelefoneController
     async buscarTelefone(request, response)
     {
         const {idTelefone} = request.params;
-        await bd.conectar();
         var telefone = new Telefone();
         const resp = await telefone.buscarTelefone(bd, idTelefone);
-        await bd.Client.end();
+
         return response.send(resp);
     }
 
@@ -47,12 +45,9 @@ class TelefoneController
     async deletar(request, response)
     {
         const {idTelefone} = request.params;
-        bd.conectar();
-
         const telefone = new Telefone();
         const resp = await telefone.deletar(bd, idTelefone);
 
-        bd.Client.end();
         return response.send("Telefone deletado");
     }
 }

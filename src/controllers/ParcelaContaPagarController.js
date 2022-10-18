@@ -50,9 +50,8 @@ class ParcelaContaPagarController{
     {
         const {idConta} = request.params;
         var parcela = new ParcelaContaPagar();
-        bd.conectar();
         const resp = await parcela.listarTodasParcelas(bd, idConta);
-        bd.Client.end();
+
         if(resp != undefined)
         {
             return response.send(resp);
@@ -67,9 +66,8 @@ class ParcelaContaPagarController{
     {
         const {idParcela} = request.params;
         var parcela = new ParcelaContaPagar();
-        bd.conectar();
         const resp = await parcela.quitarParcela(bd, idParcela);
-        bd.Client.end();
+
         if(resp > 0)
             return response.send("Parcela Quitada");
         else
@@ -80,9 +78,7 @@ class ParcelaContaPagarController{
     {
         const {idParcela, valor} = request.params;
         var parcela = new ParcelaContaPagar();
-        bd.conectar();
         const resp = await parcela.pagarParcelado(bd, idParcela, valor);
-        bd.Client.end();
 
         if(resp > 0)
             return response.send("Valor Descontado na Parcela");

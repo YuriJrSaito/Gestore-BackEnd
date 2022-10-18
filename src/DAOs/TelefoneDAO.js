@@ -4,41 +4,53 @@ module.exports = class TelefoneDAO
 {
     async gravar(bd, telefone)
     {
+        const client = await bd.conectar();
         const sql = "INSERT INTO telefone VALUES (default, $1, $2, $3) RETURNING *";
         var values = Object.values(telefone).slice(1); //retira o id
         try{
-            const res = await bd.Client.query(sql,values);
+            const res = await client.query(sql,values);
             return res.rows[0].id;
         }
-        finally{}
+        finally{
+            client.release();
+        }
     }
 
     async buscarTelefone(bd, idTelefone)
     {
+        const client = await bd.conectar();
         try {
-            let res = await bd.Client.query(`SELECT * from telefone where id='${idTelefone}'`);
+            let res = await client.query(`SELECT * from telefone where id='${idTelefone}'`);
             return res.rows;              
         }
-        finally{}
+        finally{
+            client.release();
+        }
     }
 
     async alterarTelefone(bd, telefone)
     {
+        const client = await bd.conectar();
         let sql="UPDATE telefone SET id=$1, telefone1=$2, telefone2=$3, telefone3=$4 WHERE id = $1";
         var values = Object.values(telefone);
         try{
-            let res = await bd.Client.query(sql,values);
+            let res = await client.query(sql,values);
             return res.rowCount;
         }
-        finally{}
+        finally{
+            client.release();
+        }
     }
 
     async deletar(bd, idTelefone)
     {
+        const client = await bd.conectar();
         let sql="DELETE FROM telefone WHERE id = "+idTelefone;
         try{
-            return (await bd.Client.query(sql)).rowCount;
+            return (await client.query(sql)).rowCount;
         }
-        finally{}
+        finally{
+            client.release();
+        }
     }
 }

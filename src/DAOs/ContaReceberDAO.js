@@ -2,22 +2,28 @@ module.exports = class ContaReceberDAO
 {
     async gravar(bd, contaReceber)
     {
+        const client = await bd.conectar();
         const sql = "INSERT INTO contareceber VALUES (default, $1, $2, $3, $4) RETURNING *";
         var values = Object.values(contaReceber).slice(1); //retira o id
         try{
-            const res = await bd.Client.query(sql,values);
+            const res = await client.query(sql,values);
             return res.rows[0].id;
         }
-        finally{}
+        finally{
+            client.release();
+        }
     }
 
     async buscarTodos(bd)
     {
+        const client = await bd.conectar();
         try {
-            let res = await bd.Client.query('SELECT * from contareceber');
+            let res = await client.query('SELECT * from contareceber');
             return res.rows;              
         }
-        finally{}
+        finally{
+            client.release();
+        }
     }
 
     /*async filtrarContas(bd, filtro)
@@ -42,10 +48,13 @@ module.exports = class ContaReceberDAO
 
     async deletar(bd, idConta)
     {
+        const client = await bd.conectar();
         let sql="DELETE FROM contareceber WHERE id = "+idConta;
         try{
-            return (await bd.Client.query(sql)).rowCount;
+            return (await client.query(sql)).rowCount;
         }
-        finally{}
+        finally{
+            client.release();
+        }
     }
 }

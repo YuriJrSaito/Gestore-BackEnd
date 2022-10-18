@@ -10,8 +10,7 @@ class CategoriaController{
         const {descricao} = request.body;
         var categoria = new Categoria(0, descricao);
         
-        var msg = "";
-        bd.conectar();   
+        var msg = ""; 
 
         var retorno = await categoria.procurar(bd);
         if(retorno == false)
@@ -25,7 +24,6 @@ class CategoriaController{
             msg = "Esta categoria já esta cadastrada";
         }
 
-        bd.Client.end();
         return response.send(msg);
     }
 
@@ -34,11 +32,9 @@ class CategoriaController{
         var categoria = new Categoria;
         
         var msg = "";
-        await bd.conectar();   
 
         var categorias = await categoria.buscarTudo(bd);
 
-        await bd.Client.end();
         return response.send(categorias);
     }
 
@@ -46,11 +42,9 @@ class CategoriaController{
     {
         const {idCategoria} = request.params;
         var categoria = new Categoria;
-        await bd.conectar();
         
         var resp = await categoria.buscarPorID(bd, idCategoria);
 
-        await bd.Client.end();
         return response.send(resp);
     }
 
@@ -59,9 +53,7 @@ class CategoriaController{
         const {filtro} = request.params;
 
         var categoria = new Categoria();
-        bd.conectar();
         const resp = await categoria.filtrarCategorias(bd, filtro);
-        bd.Client.end();
 
         if(resp != undefined)
         {
@@ -76,7 +68,6 @@ class CategoriaController{
     async deletar(request, response) 
     {
         const {idCategoria} = request.params;
-        bd.conectar();
         var msg="";
 
         const categoria = new Categoria();
@@ -87,8 +78,7 @@ class CategoriaController{
         else
             msg+="Algo deu errado !!";
 
-        bd.Client.end();
-        return response.send(msg); 
+        return response.send(msg);
     }
 }
 

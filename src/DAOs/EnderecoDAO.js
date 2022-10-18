@@ -4,41 +4,53 @@ module.exports = class EnderecoDAO
 {
     async gravar(bd, endereco)
     {
+        const client = await bd.conectar();
         const sql = "INSERT INTO endereco VALUES (default, $1, $2, $3, $4, $5, $6) RETURNING *";
         var values = Object.values(endereco).slice(1); //retira o id
         try{
-            const res = await bd.Client.query(sql,values);
+            const res = await client.query(sql,values);
             return res.rows[0].id;
         }
-        finally{}
+        finally{
+            client.release();
+        }
     }
 
     async buscarEndereco(bd, idEndereco)
     {
+        const client = await bd.conectar();
         try {
-            let res = await bd.Client.query(`SELECT * from endereco where id='${idEndereco}'`);
+            let res = await client.query(`SELECT * from endereco where id='${idEndereco}'`);
             return res.rows;              
         }
-        finally{}
+        finally{
+            client.release();
+        }
     }
 
     async alterarEndereco(bd, endereco)
     {
+        const client = await bd.conectar();
         let sql="UPDATE endereco SET id=$1, rua=$2, numero=$3, bairro=$4, cidade=$5, cep=$6, complemento=$7 WHERE id = $1";
         var values = Object.values(endereco);
         try{
-            let res = await bd.Client.query(sql,values);
+            let res = await client.query(sql,values);
             return res.rowCount;
         }
-        finally{}
+        finally{
+            client.release();
+        }
     }
 
     async deletar(bd, idEndereco)
     {
+        const client = await bd.conectar();
         let sql="DELETE FROM endereco WHERE id = "+idEndereco;
         try{
-            return (await bd.Client.query(sql)).rowCount;
+            return (await client.query(sql)).rowCount;
         }
-        finally{}
+        finally{
+            client.release();
+        }
     }
 }

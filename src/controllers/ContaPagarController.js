@@ -10,7 +10,6 @@ class ContaPagarController{
         var contaPagar = new ContaPagar(0, valorTotal, qtdeParcelas, titulo, observacao, dataEmissao, tipoDocumento, idFornecedor, dataPrimeiroVencimento);
         var msg = "";
 
-        bd.conectar();  
         var idConta = await contaPagar.gravar(bd);
         if(idConta > 0)
         {
@@ -22,17 +21,14 @@ class ContaPagarController{
             msg = "Algo deu errado";
         }
 
-        bd.Client.end();
-
         return response.send([msg, idConta]);
     }
 
     async listarTodasContas(request, response)
     {
         var contaPagar = new ContaPagar();
-        bd.conectar();
         const resp = await contaPagar.listarTodasContas(bd);
-        bd.Client.end();
+
         if(resp != undefined)
         {
             return response.send(resp);
@@ -47,9 +43,8 @@ class ContaPagarController{
     {
         const {filtro} = request.params;
         var contaPagar = new ContaPagar();
-        bd.conectar();
+
         const resp = await contaPagar.filtrarContas(bd, filtro);
-        bd.Client.end();
 
         if(resp != undefined)
         {
@@ -64,7 +59,6 @@ class ContaPagarController{
     async alterar(request, response)
     {
         const {idConta, valorTotal, qtdeParcelas, titulo, observacao, dataEmissao, tipoDocumento, idFornecedor, dataPrimeiroVencimento} = request.body;
-        bd.conectar();
         var msg="";
 
         var contaPagar = new ContaPagar(idConta, valorTotal, qtdeParcelas, titulo, observacao, dataEmissao, tipoDocumento, idFornecedor, dataPrimeiroVencimento);
@@ -75,14 +69,12 @@ class ContaPagarController{
         else
             msg+="Algo deu errado !!";
 
-        bd.Client.end();
         return response.send(msg);
     }
 
     async deletar(request, response) 
     {
         const {idConta} = request.params;
-        bd.conectar();
         var msg="";
 
         const contaPagar = new ContaPagar();
@@ -94,8 +86,6 @@ class ContaPagarController{
         else
             msg+="Algo deu errado em Conta a Pagar!!";
 
-
-        bd.Client.end();
         return response.send(msg); 
     }
 }

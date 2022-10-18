@@ -84,6 +84,11 @@ routes.post('/quitarParcelaCR/:idParcela', parcelaCRCtrl.quitarParcela);
 routes.put('/pagarParceladoCR/:idParcela/:valor', parcelaCRCtrl.pagarParcelado);
 
 routes.post('/cadVenda', vendaCtrl.gravar);
+routes.get('/buscarContaEmVendas/:idConta', vendaCtrl.buscarConta);
+routes.get('/listarVendas', vendaCtrl.listarTodasVendas);
+
+
 routes.post('/cadItemVenda', itemVendaCtrl.gravar);
+
 
 module.exports = routes;

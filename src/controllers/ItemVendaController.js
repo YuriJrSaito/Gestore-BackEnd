@@ -7,7 +7,6 @@ class ItemVendaController{
     async gravar(request, response)
     {
         const {produtos, idVenda} = request.body;
-        bd.conectar();
         let resp;
         let msg = "";
 
@@ -31,16 +30,14 @@ class ItemVendaController{
         else
             msg += "Algo deu errado";
 
-        bd.Client.end();
         return response.send(msg);
     }
 
     async listarTodasVendas(request, response)
     {
         var venda = new Venda();
-        await bd.conectar();
         const resp = await venda.listarTodasVendas(bd);
-        await bd.Client.end();
+
         if(resp != undefined)
         {
             return await response.send(resp);
@@ -55,9 +52,8 @@ class ItemVendaController{
     {
         const {filtro} = request.params;
         var venda = new Venda();
-        bd.conectar();
+
         const resp = await venda.filtrarVendas(bd, filtro);
-        bd.Client.end();
 
         if(resp != undefined)
         {
@@ -73,7 +69,6 @@ class ItemVendaController{
     {
         var msg="";
         const {idVenda, dataVenda, idContaReceber, idUsuario, idCliente} = request.body;
-        bd.conectar();
 
         let venda = new Venda(idVenda, dataVenda, idContaReceber, idUsuario, idCliente);
         const resp = await venda.alterar(bd);
@@ -83,14 +78,12 @@ class ItemVendaController{
         else
             msg+="Algo deu errado !!";
         
-        bd.Client.end();
         return response.send(msg);
     }
 
     async deletar(request, response) 
     {
         const {idVenda} = request.params;
-        bd.conectar();
         var msg="";
 
         const venda = new Venda();
@@ -101,7 +94,6 @@ class ItemVendaController{
         else
             msg+="Algo deu errado !!";
 
-        bd.Client.end();
         return response.send(msg);
     }
 }

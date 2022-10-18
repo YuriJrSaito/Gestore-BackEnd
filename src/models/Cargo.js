@@ -4,8 +4,7 @@ class Cargo
 {
     id;
     descricao;
-
-
+    
     constructor(id, descricao)
     {
         this.id = id;

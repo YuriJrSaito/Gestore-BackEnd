@@ -52,6 +52,12 @@ class Venda
         const resp = await new VendaDAO().buscarClienteId(bd, idConta);
         return resp;
     }
+
+    async buscarConta(bd, idConta)
+    {
+        const resp = await new VendaDAO().buscarConta(bd, idConta);
+        return resp;
+    }
 }
 
 module.exports = Venda;

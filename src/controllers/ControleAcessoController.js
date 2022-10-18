@@ -13,10 +13,8 @@ class ControleAcessoController
     async buscarControleAcesso(request, response)
     {
         const {idCA} = request.params;
-        bd.conectar();
         var controleAcesso = new ControleAcesso();
         const resp = await controleAcesso.buscarControleAcesso(bd, idCA);
-        bd.Client.end();
         return response.send(resp);
     }
 
@@ -30,18 +28,15 @@ class ControleAcessoController
     async buscarUsuario(request, response)
     {
         const {login, senha} = request.params;
-        bd.conectar();
         var controleAcesso = new ControleAcesso();
         const resp = await controleAcesso.buscarUsuario(bd, login, senha);
 
-        bd.Client.end();
         return response.send(resp);
     }
 
     async deletar(request, response) 
     {
         const {idCA} = request.params;
-        bd.conectar();
         var msg="";
 
         const controleAcesso = new ControleAcesso();
@@ -52,7 +47,6 @@ class ControleAcessoController
         else
             msg+="Algo deu errado !!";
 
-        bd.Client.end();
         return response.send(msg); 
     }
 }

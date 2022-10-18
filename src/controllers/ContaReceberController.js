@@ -12,7 +12,6 @@ class ContaReceberController{
         var contaReceber = new ContaReceber(0, qtdeParcelas, valorTotal, dataEmissao, dataPrimeiroVencimento);
         var msg = "";
 
-        bd.conectar();  
         var idConta = await contaReceber.gravar(bd);
 
         if(idConta > 0)
@@ -24,19 +23,16 @@ class ContaReceberController{
         {
             msg = "Algo deu errado";
         }
-        bd.Client.end();
         return response.send([idConta]);
     }
 
     async listarTodasContas(request, response)
     {
         var contaReceber = new ContaReceber();
-        bd.conectar();
         const resp = await contaReceber.listarTodasContas(bd);
 
-
         for(let x=0; x<resp.length; x++)
-        {        
+        {
             let idCliente = await VendaController.buscarClienteId(bd, resp[x].id);
             let nomeCliente = await ClienteController.buscarClienteNome(bd, idCliente);
 
@@ -47,11 +43,11 @@ class ContaReceberController{
                 dataEmissao: resp[x].dataEmissao,
                 dataPrimeiroVencimento: resp[x].dataPrimeiroVencimento,
                 nomeCliente: nomeCliente,
+                idCliente: idCliente,
             }
             resp[x] = c;
         }
 
-        bd.Client.end();
         /*if(resp != undefined)
         {
             return response.send(resp);
@@ -104,7 +100,6 @@ class ContaReceberController{
     async deletar(request, response) 
     {
         const {idConta} = request.params;
-        bd.conectar();
         var msg="";
 
         const contaReceber = new ContaReceber();
@@ -116,10 +111,9 @@ class ContaReceberController{
         else
             msg+="Algo deu errado em Conta a Receber!!";
 
-        bd.Client.end();
         return response.send(msg); 
     }
-
+    
     /*async buscarCliente(bd, idConta)
     {
         //bd.conectar();

@@ -15,10 +15,8 @@ class EnderecoController
     async buscarEndereco(request, response)
     {
         const {idEndereco} = request.params;
-        await bd.conectar();
         var endereco = new Endereco();
         const resp = await endereco.buscarEndereco(bd,idEndereco);
-        await bd.Client.end();
         return response.send(resp);
     }
 
@@ -32,10 +30,8 @@ class EnderecoController
     async deletar(request, response)
     {
         const {idEndereco} = request.params;
-        bd.conectar();
         const endereco = new Endereco();
         const resp = await endereco.deletar(bd, idEndereco);
-        bd.Client.end(); 
         return response.send("Endereço deletado");
     }
 }

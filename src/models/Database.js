@@ -1,4 +1,4 @@
-const { Pool, Client } = require('pg');
+/*const { Client } = require('pg');
 
 class Database{
     #client;
@@ -24,5 +24,47 @@ class Database{
         return this.#client; 
     }
 }
+
+module.exports = new Database;*/
+
+const { Pool } = require('pg');
+
+class Database
+{
+    pool;
+    constructor()
+    {
+        this.pool = new Pool({
+            user: 'postgres',
+            host: 'localhost',
+            database: 'postgres',
+            password: 'postgres123',
+            port: 5432,
+            max: 10,
+        });
+        console.log("Conectado");
+    }
+
+    async conectar()
+    {
+        try{
+            return this.pool.connect()
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    async fechar()
+    {
+        try{
+            return this.pool.end()
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+}
+
 
 module.exports = new Database;
