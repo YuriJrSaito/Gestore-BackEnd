@@ -13,4 +13,16 @@ module.exports = class ItemVendaDAO
             client.release();
         }
     }
+
+    async buscarProduto(bd, idProduto)
+    {
+        const client = await bd.conectar();
+        try {
+            let res = await client.query(`SELECT * from "itemVenda" where id_produto='${idProduto}'`);
+            return res.rows;              
+        }
+        finally{
+            client.release();
+        }
+    }
 }

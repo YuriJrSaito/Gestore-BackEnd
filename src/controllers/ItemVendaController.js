@@ -96,6 +96,15 @@ class ItemVendaController{
 
         return response.send(msg);
     }
+
+    async buscarProduto(request, response)
+    {
+        const {idProduto} = request.params;
+        const itemVenda = new ItemVenda();
+        const resp = await itemVenda.buscarProduto(bd, idProduto);
+
+        return response.send(resp); 
+    }
 }
 
 module.exports = new ItemVendaController();

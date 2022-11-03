@@ -16,6 +16,18 @@ module.exports = class ControleAcessoDAO
         }
     }
 
+    async verificarExiste(bd, login)
+    {
+        const client = await bd.conectar();
+        try{
+            let res = await client.query(`SELECT * from controle_acesso where login='${login}'`);
+            return res.rowCount;              
+        }
+        finally{
+            client.release();
+        }
+    }
+
     async buscarControleAcesso(bd, idCA)
     {
         const client = await bd.conectar();

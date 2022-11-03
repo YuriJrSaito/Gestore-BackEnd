@@ -86,9 +86,11 @@ routes.put('/pagarParceladoCR/:idParcela/:valor', parcelaCRCtrl.pagarParcelado);
 routes.post('/cadVenda', vendaCtrl.gravar);
 routes.get('/buscarContaEmVendas/:idConta', vendaCtrl.buscarConta);
 routes.get('/listarVendas', vendaCtrl.listarTodasVendas);
-
+routes.get('/buscarUsVenda/:idUsuario', vendaCtrl.buscarUsuario);
+routes.get('/buscarClienteVenda/:idCliente', vendaCtrl.buscarCliente);
 
 routes.post('/cadItemVenda', itemVendaCtrl.gravar);
+routes.get('/buscarProdVenda/:idProduto', itemVendaCtrl.buscarProduto);
 
 
 module.exports = routes;

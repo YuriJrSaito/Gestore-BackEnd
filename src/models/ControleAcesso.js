@@ -23,6 +23,12 @@ class ControleAcesso
         return resp;
     }
 
+    async verificarExiste(bd, login)
+    {
+        const resp = await new ControleAcessoDAO().verificarExiste(bd, login);
+        return resp;
+    }
+
     async buscarControleAcesso(bd, idCA)
     {
         const resp = await new ControleAcessoDAO().buscarControleAcesso(bd, idCA);

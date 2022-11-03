@@ -40,6 +40,12 @@ class ItemVenda
         const resp = await new ItemVendaDAO().deletar(bd, idVenda);
         return resp;
     }
+
+    async buscarProduto(bd, idProduto)
+    {
+        const resp = await new ItemVendaDAO().buscarProduto(bd, idProduto);
+        return resp;
+    }
 }
 
 module.exports = ItemVenda;
