@@ -76,6 +76,12 @@ class ControleAcessoController
 
         return response.send(msg); 
     }
+
+    async logout(request, response)
+    {
+        bd.fechar();
+        return response.send("fechou");
+    }
 }
 
 module.exports = new ControleAcessoController();

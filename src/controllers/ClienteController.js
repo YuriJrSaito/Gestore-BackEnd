@@ -107,6 +107,14 @@ class ClienteController{
 
         return resp; 
     }
+
+    async buscarCPF(bd, idCliente)
+    {
+        const cliente = new Cliente();
+        const resp = await cliente.buscarCPF(bd, idCliente);
+
+        return resp; 
+    }
 }
 
 module.exports = new ClienteController();

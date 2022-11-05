@@ -60,6 +60,12 @@ class Cliente extends Pessoa
         const resp = await new ClienteDAO().buscarClienteNome(bd, idCliente);
         return resp;
     }
+
+    async buscarCPF(bd, idCliente)
+    {
+        const resp = await new ClienteDAO().buscarCPF(bd, idCliente);
+        return resp;
+    }
 }
 
 module.exports = Cliente;

@@ -97,4 +97,19 @@ module.exports = class ClienteDAO
             client.release();
         }
     }
+
+    async buscarCPF(bd, idCliente)
+    {
+        const client = await bd.conectar();
+        try {
+            let res = await client.query(`SELECT * from cliente where id = ${idCliente}`);
+            return res.rows[0].cpf;             
+        }
+        catch(err){
+            console.log(err);
+        }
+        finally{
+            client.release();
+        }
+    }
 }

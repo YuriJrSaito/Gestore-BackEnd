@@ -16,6 +16,8 @@ const contaReceberCtrl = require('./controllers/ContaReceberController');
 const parcelaCRCtrl = require('./controllers/ParcelaContaReceberController');
 const vendaCtrl = require('./controllers/VendaController');
 const itemVendaCtrl = require('./controllers/ItemVendaController');
+const vendaCondCtrl = require('./controllers/VendaCondController');
+const listaCondCtrl = require('./controllers/ListaCondController');
 
 routes.post('/cadCliente',clienteCtrl.gravar);
 routes.put('/altCliente', clienteCtrl.alterarCliente);
@@ -30,6 +32,7 @@ routes.delete('/deletarTelefone/:idTelefone', telefoneCtrl.deletar);
 
 routes.get('/buscarControleAcesso/:idCA', controleAcessoCtrl.buscarControleAcesso);
 routes.get('/logar/:login/:senha', controleAcessoCtrl.buscarUsuario);
+routes.post('/logout', controleAcessoCtrl.logout);
 routes.delete('/deletarAcesso/:idCA', controleAcessoCtrl.deletar);
 
 routes.post('/cadCargo',cargoCtrl.gravar);
@@ -92,5 +95,13 @@ routes.get('/buscarClienteVenda/:idCliente', vendaCtrl.buscarCliente);
 routes.post('/cadItemVenda', itemVendaCtrl.gravar);
 routes.get('/buscarProdVenda/:idProduto', itemVendaCtrl.buscarProduto);
 
+routes.post('/cadVendaCond', vendaCondCtrl.gravar);
+routes.get('/listarVendasCond', vendaCondCtrl.listarTodasVendas);
+routes.get('/buscarUsVendaCond/:idUsuario', vendaCondCtrl.buscarUsuario);
+routes.delete('/deletarVendaCond/:idVenda', vendaCondCtrl.deletar);
+
+routes.post('/cadListaCond', listaCondCtrl.gravar);
+routes.delete('/deletarListaCond/:idVenda', listaCondCtrl.excluir);
+routes.get('/buscarProdutosCond/:idVenda', listaCondCtrl.buscarProdutos);
 
 module.exports = routes;

@@ -83,7 +83,6 @@ module.exports = class UsuarioDAO
         const client = await bd.conectar();
         try{
             let res = await client.query(`SELECT * from usuario where "id_controle_acesso"=${idAcesso}`);
-            console.log(resp.rows[0]);
             return res.rows[0].id;
         }
         finally{

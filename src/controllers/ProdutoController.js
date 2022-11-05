@@ -105,6 +105,16 @@ class ProdutoController{
 
         return resp;
     }
+
+    async devolverTodosProdutos(bd, produtos)
+    {
+        for(let x=0; x<produtos.length; x++)
+        {
+            let produto = new Produto();
+            await produto.devolver(bd, produtos[x].id_produto, produtos[x].quantidade);
+        }
+        return true;
+    }
 }
 
 module.exports = new ProdutoController();
