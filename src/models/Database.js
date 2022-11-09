@@ -28,7 +28,7 @@ class Database{
 module.exports = new Database;*/
 
 const { Pool } = require('pg');
-
+//ao ja ter utilizado o banco antes do logout, ao dar logout o erro "Cannot use a pool after calling end on the pool" aparece
 class Database
 {
     pool;

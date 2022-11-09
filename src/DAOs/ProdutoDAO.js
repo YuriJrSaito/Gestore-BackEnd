@@ -55,6 +55,19 @@ module.exports = class ProdutoDAO
         }
     }
 
+    async controleEstoque2(bd, idProduto, quantidadeSelecionado)
+    {
+        const client = await bd.conectar();
+        let sql=`UPDATE produto SET "qtdeEstoque"= "qtdeEstoque"-${quantidadeSelecionado} WHERE id = ${idProduto}`;
+        try{
+            let res = await client.query(sql);
+            return res.rowCount;
+        }
+        finally{
+            client.release();
+        }
+    }
+
     async devolver(bd, idProduto, quantidade)
     {
         const client = await bd.conectar();

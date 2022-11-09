@@ -40,6 +40,12 @@ class ListaCondicional
         const resp = await new ListaCondicionalDAO().deletar(bd, idVenda);
         return resp;
     }
+
+    async deletarAlterar(bd, idProduto, idVenda)
+    {
+        const resp = await new ListaCondicionalDAO().deletarAlterar(bd, idProduto, idVenda);
+        return resp;
+    }
 }
 
 module.exports = ListaCondicional;

@@ -3,6 +3,7 @@ const bd = require('../models/Database');
 const ListaCond = require('../models/ListaCondicional');
 const ProdutoController = require('../controllers/ProdutoController');
 const { request, response } = require('express');
+const req = require('express/lib/request');
 
 class ListaCondController{
     async gravar(request, response)
@@ -58,6 +59,7 @@ class ListaCondController{
         for(let x=0; x<produtos.length; x++)
         {
             let prod = {
+                idLista: produtos[x].id,
                 quantidade: produtos[x].quantidade,
                 idProduto: produtos[x].id_produto,
             }
@@ -65,6 +67,42 @@ class ListaCondController{
         }
 
         return response.send(produtos);
+    }
+
+    async alterar(request, response)
+    {
+        const {produtos, idVenda, produtosEx} = request.body;
+        let msg = "";
+
+        for(let x=0; x<produtos.length; x++)
+        {
+            let valor = parseFloat(produtos[x].valorUnitario) * parseInt(produtos[x].qtdeSelecionado);
+            valor = parseFloat(valor.toFixed(2));
+            if(produtos[x].novoItem === false) //alterar
+            {
+                let qtde = parseInt(produtos[x].qtdeEstoque) - parseInt(produtos[x].qtdeSelecionado);
+                await ProdutoController.controleEstoque(bd, produtos[x].id, qtde);
+                let listaCond = new ListaCond(produtos[x].idLista, idVenda, produtos[x].id, produtos[x].qtdeSelecionado, valor);
+                await listaCond.alterar(bd);
+            }
+            else
+                if(produtos[x].novoItem === true) //gravar novo 
+                {
+                    await ProdutoController.controleEstoque2(bd, produtos[x].id, produtos[x].qtdeSelecionado);
+                    let listaCond = new ListaCond(0, idVenda, produtos[x].id, produtos[x].qtdeSelecionado, valor);
+                    await listaCond.gravar(bd);
+                }
+        }
+        //console.log(produtosEx);
+
+        for(let x=0; x<produtosEx.length; x++) //excluir
+        {
+            await ProdutoController.controleEstoque(bd, produtosEx[x].idProduto, produtosEx[x].quantidade);
+            let listaCond = new ListaCond();
+            await listaCond.deletarAlterar(bd, produtosEx[x].idProduto, idVenda);
+        }
+
+        return response.send("Excluido");
     }
 }
 

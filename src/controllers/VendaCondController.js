@@ -53,9 +53,8 @@ class VendaCondController{
     async alterar(request, response)
     {
         var msg="";
-        const {dataCriacao, dataLimite, observacao, valorTotal, idAcesso, idCliente} = request.body;
-        let idUsuario = await UsuarioController.procurarUsuarioAcesso(bd, idAcesso);
-        var venda = new Venda(0, dataCriacao, dataLimite, observacao, valorTotal, idUsuario, idCliente);
+        const {idVenda, dataCriacao, dataLimite, observacao, valorTotal} = request.body;
+        var venda = new Venda(idVenda, dataCriacao, dataLimite, observacao, valorTotal, 0, 0);
         const resp = await venda.alterar(bd);
 
         if(resp>0)

@@ -99,9 +99,11 @@ routes.post('/cadVendaCond', vendaCondCtrl.gravar);
 routes.get('/listarVendasCond', vendaCondCtrl.listarTodasVendas);
 routes.get('/buscarUsVendaCond/:idUsuario', vendaCondCtrl.buscarUsuario);
 routes.delete('/deletarVendaCond/:idVenda', vendaCondCtrl.deletar);
+routes.put('/alterarVendaCond', vendaCondCtrl.alterar);
 
 routes.post('/cadListaCond', listaCondCtrl.gravar);
 routes.delete('/deletarListaCond/:idVenda', listaCondCtrl.excluir);
 routes.get('/buscarProdutosCond/:idVenda', listaCondCtrl.buscarProdutos);
+routes.put('/alterarListaCond', listaCondCtrl.alterar);
 
 module.exports = routes;

@@ -41,8 +41,8 @@ module.exports = class vendaCondDAO
     async alterar(bd, venda)
     {
         const client = await bd.conectar();
-        let sql='UPDATE "vendaCondicional" SET id=$1, "dataCriacao"=$2, "dataLimite"=$3, observacao=$4, valorTotal=$5, "id_usuario"=$6, "id_cliente"=$7 WHERE id = $1';
-        var values = Object.values(venda);
+        let sql='UPDATE "vendaCondicional" SET id=$1, "dataCriacao"=$2, "dataLimite"=$3, observacao=$4, "valorTotal"=$5 WHERE id = $1';
+        var values = Object.values(venda).slice(0,5);
         try{
             let res = await client.query(sql,values);
             return res.rowCount;

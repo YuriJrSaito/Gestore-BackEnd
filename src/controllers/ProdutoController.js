@@ -115,6 +115,12 @@ class ProdutoController{
         }
         return true;
     }
+
+    async controleEstoque2(bd, idProduto, quantidadeSelecionado)
+    {
+        let produto = new Produto();
+        await produto.controleEstoque2(bd, idProduto, quantidadeSelecionado);
+    }
 }
 
 module.exports = new ProdutoController();
