@@ -90,6 +90,12 @@ class Produto
         const resp = await new ProdutoDAO().controleEstoque2(bd, idProduto, quantidadeSelecionado);
         return resp;
     }
+
+    async buscarProduto(bd, idProduto)
+    {
+        const resp = await new ProdutoDAO().buscarProduto(bd, idProduto);
+        return resp;
+    }
 }
 
 module.exports = Produto;

@@ -18,6 +18,7 @@ const vendaCtrl = require('./controllers/VendaController');
 const itemVendaCtrl = require('./controllers/ItemVendaController');
 const vendaCondCtrl = require('./controllers/VendaCondController');
 const listaCondCtrl = require('./controllers/ListaCondController');
+const { route } = require('express/lib/application.js');
 
 routes.post('/cadCliente',clienteCtrl.gravar);
 routes.put('/altCliente', clienteCtrl.alterarCliente);
@@ -61,6 +62,7 @@ routes.get('/listarTodosProdutos',produtoCtrl.listarTodosProdutos);
 routes.get('/filtrarProdutos/:filtro', produtoCtrl.filtrarProdutos);
 routes.get('/buscarFornecedor/:idFornecedor', produtoCtrl.buscarFornecedor);
 routes.get('/buscarCategoriaProd/:idCategoria', produtoCtrl.buscarCategoria);
+routes.post('/buscarInfoProdutos', produtoCtrl.buscarProdutosInfo);
 
 routes.post('/cadFornecedor', fornecedorCtrl.gravar);
 routes.put('/altFornecedor', fornecedorCtrl.alterar);

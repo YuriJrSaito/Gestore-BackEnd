@@ -121,6 +121,36 @@ class ProdutoController{
         let produto = new Produto();
         await produto.controleEstoque2(bd, idProduto, quantidadeSelecionado);
     }
+
+    async buscarProdutosInfo(request, response)
+    {
+        const {items} = request.body;
+
+        let produtos = [];
+
+        for(let prod of items)
+        {
+            let produtoObjeto = new Produto();
+            let produto = await produtoObjeto.buscarProduto(bd, prod.idProduto);
+
+            let newProd = {
+                id: produto.id,
+                titulo: produto.titulo,
+                valorUnitario: produto.valorUnitario,
+                qtdeEstoque: produto.qtdeEstoque,
+                img1: produto.img1,
+                codigo: produto.codigoReferencia,
+                qtdeNoItem: prod.quantidade,
+                qtdeSelecionado: prod.quantidade,
+                valor: prod.valor,
+                itemId: prod.idLista,
+            }
+
+            produtos = [...produtos, newProd];
+        }
+
+        return response.send(produtos);
+    }
 }
 
 module.exports = new ProdutoController();

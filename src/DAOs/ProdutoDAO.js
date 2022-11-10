@@ -28,6 +28,18 @@ module.exports = class ProdutoDAO
         }
     }
 
+    async buscarProduto(bd, idProduto)
+    {
+        const client = await bd.pool.connect();
+        try {
+            let res = await client.query('SELECT * from produto where id='+idProduto);
+            return res.rows[0];              
+        }
+        finally{
+            client.release();
+        }
+    }
+
     async alterar(bd, produto)
     {
         const client = await bd.conectar();

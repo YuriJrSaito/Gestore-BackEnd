@@ -17,7 +17,6 @@ class TelefoneController
         const {idTelefone} = request.params;
         var telefone = new Telefone();
         const resp = await telefone.buscarTelefone(bd, idTelefone);
-
         return response.send(resp);
     }
 

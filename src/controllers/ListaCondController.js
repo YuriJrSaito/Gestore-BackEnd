@@ -62,6 +62,7 @@ class ListaCondController{
                 idLista: produtos[x].id,
                 quantidade: produtos[x].quantidade,
                 idProduto: produtos[x].id_produto,
+                valor: produtos[x].valor,
             }
             produtos[x] = prod;
         }
@@ -93,7 +94,6 @@ class ListaCondController{
                     await listaCond.gravar(bd);
                 }
         }
-        //console.log(produtosEx);
 
         for(let x=0; x<produtosEx.length; x++) //excluir
         {
