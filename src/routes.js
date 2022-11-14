@@ -107,5 +107,6 @@ routes.post('/cadListaCond', listaCondCtrl.gravar);
 routes.delete('/deletarListaCond/:idVenda', listaCondCtrl.excluir);
 routes.get('/buscarProdutosCond/:idVenda', listaCondCtrl.buscarProdutos);
 routes.put('/alterarListaCond', listaCondCtrl.alterar);
+routes.post('/devolverProdutosCond', listaCondCtrl.devolver);
 
 module.exports = routes;

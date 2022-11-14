@@ -151,6 +151,13 @@ class ProdutoController{
 
         return response.send(produtos);
     }
-}
+
+    async devolver(bd, idProduto, quantidade)
+    {
+        let produto = new Produto();
+        let resp = await produto.devolver(bd, idProduto, quantidade);
+        return resp;
+    }
+}   
 
 module.exports = new ProdutoController();

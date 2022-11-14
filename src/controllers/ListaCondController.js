@@ -104,6 +104,28 @@ class ListaCondController{
 
         return response.send("Excluido");
     }
+
+    async devolver(request, response)
+    {
+        const {items, idVenda} = request.body;
+
+        for(let item of items)
+        {
+            let listaCond = new ListaCond();
+            await ProdutoController.devolver(bd, item.id, item.qtdeNoItem);
+
+            if(item.qtdeNoItem == item.qtdeSelecionado)
+            {
+                await listaCond.deletarAlterar(bd, item.id, idVenda);
+            }
+            else
+            {
+                await listaCond.alterarQuantidadeItem(bd, item.itemId, parseInt(item.qtdeNoItem)-parseInt(item.qtdeSelecionado));
+            }
+        }
+
+        return response.send("Venda atualizada !!");
+    }
 }
 
 module.exports = new ListaCondController();

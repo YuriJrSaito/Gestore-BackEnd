@@ -63,4 +63,16 @@ module.exports = class ListaCondDAO
             client.release();
         }
     }
+
+    async alterarQuantidadeItem(bd, idItem, quantidade)
+    {
+        const client = await bd.conectar();
+        try {
+        let res = await client.query(`UPDATE "vendaCondicional_lista" SET quantidade=${quantidade} WHERE id = ${idItem}`);
+            return res.rows;              
+        }
+        finally{
+            client.release();
+        }
+    }
 }

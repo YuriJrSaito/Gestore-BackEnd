@@ -9,19 +9,21 @@ class ItemVendaController{
         const {produtos, idVenda} = request.body;
         let resp;
         let msg = "";
+        console.log(produtos);
 
         for(let x=0; x<produtos.length; x++)
         {   
+            let qtde = parseInt(produtos[x].qtdeEstoque) - parseInt(produtos[x].qtdeSelecionado);
+            await ProdutoController.controleEstoque(bd, produtos[x].id, qtde);
+
             if(parseInt(produtos[x].qtdeSelecionado) > 0)
             {
                 let valor = parseInt(produtos[x].qtdeSelecionado) * parseFloat(produtos[x].valorUnitario);
                 valor = parseFloat(valor.toFixed(2));
 
-                let qtde = parseInt(produtos[x].qtdeEstoque) - parseInt(produtos[x].qtdeSelecionado);
-
                 let itemVenda = new ItemVenda(0, produtos[x].qtdeSelecionado, valor, idVenda, produtos[x].id);
                 await itemVenda.gravar(bd);
-                await ProdutoController.controleEstoque(bd, produtos[x].id, qtde);
+
             }
         }
 
