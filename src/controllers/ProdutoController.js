@@ -1,6 +1,7 @@
 const axios = require('axios');
 const bd = require('../models/Database');
-
+const Categoria = require('../models/Categoria');
+const Fornecedor = require('../models/Fornecedor');
 const Produto = require('../models/Produto');
 
 class ProdutoController{
@@ -8,7 +9,7 @@ class ProdutoController{
     async gravar(request, response)
     {
         const {titulo, codigoRef, qtdeEstoque, descricao, valorUnitario, valorCompra, idFornecedor, idCategoria, img1, img2, img3} = request.body;
-        var produto = new Produto(0, codigoRef, qtdeEstoque, titulo, descricao, valorUnitario, valorCompra, idCategoria, idFornecedor, img1, img2, img3);
+        var produto = new Produto(0, codigoRef, qtdeEstoque, titulo, descricao, valorUnitario, valorCompra, idCategoria, idFornecedor, img1, img2, img3, 0);
         var msg = "";
         var resp = await produto.gravar(bd);
 
@@ -157,6 +158,36 @@ class ProdutoController{
         let produto = new Produto();
         let resp = await produto.devolver(bd, idProduto, quantidade);
         return resp;
+    }
+
+    async atualizarQtdeVendido(bd, idProduto, quantidade)
+    {
+        let produto = new Produto();
+        let resp = await produto.atualizarQtdeVendido(bd, idProduto, quantidade);
+        return resp;
+    }
+
+    async relEstoque(request, response)
+    {
+        var produto = new Produto();
+        const resp = await produto.listarTodosProdutos(bd);
+        let lista = [];
+        
+        for(let x=0; x<resp.length; x++)
+        {
+            let fornecedorClass = new Fornecedor();
+            let fornecedor = await fornecedorClass.buscarFornecedor(bd, resp[x].id_fornecedor);
+
+            let categoriaClass = new Categoria();
+            let categoria = await categoriaClass.buscarPorID(bd, resp[x].id_categoria);
+            
+            let vetaux = [resp[x].id, resp[x].codigoReferencia, resp[x].titulo, resp[x].qtdeEstoque, 
+                        resp[x].valorUnitario, resp[x].valorDeCompra, categoria[0].descricao, fornecedor[0].nome];
+
+            lista.push(vetaux);
+        }
+
+        return response.send(lista);
     }
 }   
 

@@ -70,6 +70,18 @@ class Venda
         const resp = await new VendaDAO().buscarCliente(bd, idCliente);
         return resp;
     }
+
+    async buscarQtdeVendas(bd, idVenda)
+    {
+        const resp = await new VendaDAO().buscarQtdeVendas(bd, idVenda);
+        return resp;
+    }
+
+    async buscarVendasUsuario(bd, idUsuario)
+    {
+        const resp = await new VendaDAO().buscarVendasUsuario(bd, idUsuario);
+        return resp;
+    }
 }
 
 module.exports = Venda;

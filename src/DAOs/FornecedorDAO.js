@@ -26,6 +26,18 @@ module.exports = class FornecedorDAO
         }
     }
 
+    async buscarFornecedor(bd, idFornecedor)
+    {
+        const client = await bd.conectar();
+        try {
+            let res = await client.query('SELECT * from fornecedor WHERE id='+idFornecedor);
+            return res.rows;              
+        }
+        finally{
+            client.release();
+        }
+    }
+
     async filtroFornecedores(bd, filtro)
     {
         const client = await bd.conectar();

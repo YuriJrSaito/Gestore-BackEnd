@@ -1,6 +1,9 @@
 const bd = require('../models/Database');
 const ContaPagar = require('../models/ContaPagar');
 const ParcelaController = require("../controllers/ParcelaContaPagarController");
+const Parcela = require('../models/ParcelaContaPagar');
+const Fornecedor = require('../models/Fornecedor');
+const moment = require('moment');
 
 class ContaPagarController{
 
@@ -87,6 +90,42 @@ class ContaPagarController{
             msg+="Algo deu errado em Conta a Pagar!!";
 
         return response.send(msg); 
+    }
+
+    async relTodasContasPagar(request, response)
+    {
+        var conta = new ContaPagar();
+        const resp = await conta.listarTodasContas(bd);
+        let lista = [];
+        
+        for(let x=0; x<resp.length; x++)
+        {
+            let fornecedorClass = new Fornecedor();
+            let fornecedor = await fornecedorClass.buscarFornecedor(bd, resp[x].id_fornecedor);
+
+            let parcelaClass = new Parcela();
+            let parcelas = await parcelaClass.listarTodasParcelas(bd, resp[x].id);
+
+            let qtdeNaoPago = 0;
+            let naoPago = 0;
+            
+            for(let parcela of parcelas)
+            {
+                if(parcela.situacao == "Não pago")
+                {
+                    naoPago = parseFloat(naoPago) + parseFloat(parcela.valor);
+                    qtdeNaoPago++;
+                }
+            }
+            
+            let vetaux = [resp[x].id, fornecedor[0].nome, resp[x].titulo, 
+                        moment.utc(resp[x].dataEmissao).format('DD-MM-YYYY'), 
+                        resp[x].valorTotal, parseFloat(naoPago).toFixed(2), resp[x].qtdeParcelas, qtdeNaoPago];
+
+            lista.push(vetaux);
+        }
+
+        return response.send(lista);
     }
 }
 

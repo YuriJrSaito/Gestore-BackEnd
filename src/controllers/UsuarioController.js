@@ -5,6 +5,9 @@ const Usuario = require('../models/Usuario');
 const TelefoneController = require('../controllers/TelefoneController');
 const EnderecoController = require('../controllers/EnderecoController');
 const ControleAcessoController = require('../controllers/ControleAcessoController');
+const Venda = require('../models/Venda');
+const ContaReceber = require('../models/ContaReceber');
+const ParcelaCR = require('../models/ParcelaContaReceber');
 
 class UsuarioController{
 
@@ -133,6 +136,55 @@ class UsuarioController{
         let resp = await usuario.buscarUsuarioNome(bd, idUsuario);
 
         return resp;
+    }
+
+    async relProdutividade(request, response)
+    {
+        let usuario = new Usuario();
+        let usuarios = await usuario.listarTodosUsuarios(bd);
+
+        let lista = [];
+        let totalVendas = 0;
+        let valorTotalVendas = 0;
+        let valorTotalVendasNaoPago = 0;
+
+        for(let usuario of usuarios)
+        {
+            let venda = new Venda();
+            let vendas = await venda.buscarVendasUsuario(bd, usuario.id);
+            
+            totalVendas = vendas.length;
+
+            for(let v of vendas)
+            {
+                let conta = new ContaReceber();
+                let contas = await conta.buscarConta(bd, v.id_contaReceber);
+                
+                for(let c of contas)
+                {
+                    let parcela = new ParcelaCR();
+                    let parcelas = await parcela.listarTodasParcelas(bd, c.id);
+
+                    for(let p of parcelas)
+                    {
+                        if(p.situacao === "Não pago")
+                        {
+                            valorTotalVendasNaoPago = parseFloat(valorTotalVendasNaoPago) + parseFloat(p.valor);
+                        }
+                        else
+                        {
+                            valorTotalVendas = parseFloat(valorTotalVendas) + parseFloat(p.valorTotal);
+                        }
+                    }
+                }
+            }
+
+            let vetaux = [usuario.id, usuario.nome, totalVendas, parseFloat(valorTotalVendas).toFixed(2), 
+                        parseFloat(valorTotalVendasNaoPago).toFixed(2)];
+            lista.push(vetaux);
+        }
+
+        return response.send(lista);
     }
 }
 

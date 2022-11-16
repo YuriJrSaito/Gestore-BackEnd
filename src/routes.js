@@ -18,7 +18,6 @@ const vendaCtrl = require('./controllers/VendaController');
 const itemVendaCtrl = require('./controllers/ItemVendaController');
 const vendaCondCtrl = require('./controllers/VendaCondController');
 const listaCondCtrl = require('./controllers/ListaCondController');
-const { route } = require('express/lib/application.js');
 
 routes.post('/cadCliente',clienteCtrl.gravar);
 routes.put('/altCliente', clienteCtrl.alterarCliente);
@@ -105,8 +104,20 @@ routes.put('/alterarVendaCond', vendaCondCtrl.alterar);
 
 routes.post('/cadListaCond', listaCondCtrl.gravar);
 routes.delete('/deletarListaCond/:idVenda', listaCondCtrl.excluir);
+routes.delete('/deletarListaCondSemEstoque/:idVenda', listaCondCtrl.excluirSemEstoque); //este não altera o estoque
 routes.get('/buscarProdutosCond/:idVenda', listaCondCtrl.buscarProdutos);
 routes.put('/alterarListaCond', listaCondCtrl.alterar);
 routes.post('/devolverProdutosCond', listaCondCtrl.devolver);
+
+
+//Relatórios
+routes.get('/relTodasVendas', vendaCtrl.relTodasVendas);
+routes.get('/relTodosClientes', clienteCtrl.relTodosClientes);
+routes.get('/relTodasContasReceber', contaReceberCtrl.relTodasContasReceber);
+routes.get('/relTodasContasPagar', contaPagarCtrl.relTodasContasPagar);
+routes.get('/relEstoque', produtoCtrl.relEstoque);
+routes.get('/relCategoriasMaisVendidas', categoriaCtrl.relMaisVendidas);
+routes.get('/relCategoriasMenosVendidas', categoriaCtrl.relMenosVendidas);
+routes.get('/relProdutividadeFuncionarios', usuarioCtrl.relProdutividade);
 
 module.exports = routes;

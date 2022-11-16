@@ -84,6 +84,13 @@ class ParcelaContaReceberController{
         else
             return response.send("Algo deu errado");
     }
+
+    async buscarParcelas(bd, idConta)
+    {
+        let parcela = new ParcelaContaReceber();
+        let resp = await parcela.listarTodasParcelas(bd, idConta);
+        return resp;
+    }
 }
 
 module.exports = new ParcelaContaReceberController();

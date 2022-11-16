@@ -3,6 +3,10 @@ const bd = require('../models/Database');
 const Venda = require('../models/Venda');
 const UsuarioController = require('../controllers/UsuarioController');
 const ClienteController = require("../controllers/ClienteController");
+const ContaReceberController = require('../controllers/ContaReceberController');
+const ParcelaControllerCR = require("../controllers/ParcelaContaReceberController");
+const ContaReceber = require('../models/ContaReceber');
+const moment = require('moment');
 
 class VendaController{
     async gravar(request, response)
@@ -133,6 +137,63 @@ class VendaController{
         const resp = await venda.buscarCliente(bd, idCliente);
 
         return response.send(resp); 
+    }
+
+    async relTodasVendas(request, response)
+    {
+        var venda = new Venda();
+        const resp = await venda.listarTodasVendas(bd);
+        let lista = [];
+
+        for(let x=0; x<resp.length; x++)
+        {
+            let nomeCliente = await ClienteController.buscarClienteNome(bd, resp[x].id_cliente);
+            let nomeUsuario = await UsuarioController.buscarUsuarioNome(bd, resp[x].id_usuario);
+
+            let contaReceber = new ContaReceber();
+            let conta = await contaReceber.buscarConta(bd, resp[x].id_contaReceber);
+
+            let parcelas = await ParcelaControllerCR.buscarParcelas(bd, conta[0].id);
+
+            let naoPago = 0;
+            let totalNaoPago = 0;
+
+            for(let parcela of parcelas)
+            {
+                if(parcela.situacao == "Não pago")
+                {
+                    totalNaoPago = totalNaoPago + parseFloat(parcela.valor);
+                    naoPago++;
+                }
+            }
+           
+            /*var v = {
+                idVenda: resp[x].id,
+                nomeUsuario: nomeUsuario,
+                nomeCliente: nomeCliente,
+                dataVenda: moment.utc(resp[x].dataVenda).format('DD-MM-YYYY'),
+                qtdeParcelas: conta[0].qtdeParcelas,
+                qtdeParcelasNpago: naoPago,
+                valorTotal: parseFloat(conta[0].valorTotal).toFixed(2),
+                valorTotalNpago: parseFloat(totalNaoPago).toFixed(2),
+            }*/
+            //resp[x] = v;
+
+            let vetaux = [resp[x].id, nomeUsuario, nomeCliente, moment.utc(resp[x].dataVenda).format('DD-MM-YYYY'),
+                        conta[0].qtdeParcelas, naoPago, parseFloat(conta[0].valorTotal).toFixed(2), 
+                        parseFloat(totalNaoPago).toFixed(2)];
+
+            lista.push(vetaux);
+        }
+
+        return response.send(lista);
+    }
+    
+    async buscarQtdeVendas(bd, idVenda)
+    {
+        const venda = new Venda();
+        const resp = await venda.buscarQtdeVendas(bd, idVenda);
+        return resp;
     }
 }
 

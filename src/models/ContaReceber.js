@@ -46,6 +46,12 @@ class ContaReceber
         const resp = await new ContaReceberDAO().deletar(bd, idConta);
         return resp;
     }
+
+    async buscarConta(bd, idConta)
+    {
+        const resp = await new ContaReceberDAO().buscarConta(bd, idConta);
+        return resp;
+    }
 }
 
 module.exports = ContaReceber;

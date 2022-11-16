@@ -3,6 +3,7 @@ const ContaReceber = require('../models/ContaReceber');
 const ParcelaController = require("../controllers/ParcelaContaReceberController");
 const VendaController = require("../controllers/VendaController");
 const ClienteController = require("../controllers/ClienteController");
+const moment = require('moment');
 
 class ContaReceberController{
 
@@ -59,25 +60,6 @@ class ContaReceberController{
         return response.send(resp);
     }
 
-    //todo: programar formas de filtrar contas por usuario/cliente/data ou outros
-    /*async filtrarContas(request, response)
-    {
-        const {filtro} = request.params;
-        var contaPagar = new ContaPagar();
-        bd.conectar();
-        const resp = await contaPagar.filtrarContas(bd, filtro);
-        bd.Client.end();
-
-        if(resp != undefined)
-        {
-            return response.send(["",resp]);
-        }
-        else
-        {
-            return response.send(["Não há Contas a Pagar cadastradas", []]);
-        }
-    }*/
-
     //todo: relizar esta função posteriormente
     /*async alterar(request, response)
     {
@@ -112,6 +94,48 @@ class ContaReceberController{
             msg+="Algo deu errado em Conta a Receber!!";
 
         return response.send(msg); 
+    }
+
+    //ta dando erro typeerror: is no a function
+    async buscarConta(bd, idConta)
+    {
+        let contaReceber = new ContaReceber();
+        let resp = await contaReceber.buscarConta(bd, idConta);
+        return resp;
+    }
+
+    async relTodasContasReceber(request, response)
+    {
+        var conta = new ContaReceber();
+        const resp = await conta.listarTodasContas(bd);
+        let lista = [];
+        
+        for(let x=0; x<resp.length; x++)
+        {
+            let idCliente = await VendaController.buscarClienteId(bd, resp[x].id);
+            let nomeCliente = await ClienteController.buscarClienteNome(bd, idCliente);
+
+            let qtdeNaoPago = 0;
+            let naoPago = 0;
+            
+            let parcelas = await ParcelaController.buscarParcelas(bd, resp[x].id);
+
+            for(let parcela of parcelas)
+            {
+                if(parcela.situacao == "Não pago")
+                {
+                    naoPago = parseFloat(naoPago) + parseFloat(parcela.valor);
+                    qtdeNaoPago++;
+                }
+            }
+            
+            let vetaux = [resp[x].id, nomeCliente, moment.utc(resp[x].dataEmissao).format('DD-MM-YYYY'), 
+                        resp[x].valorTotal, parseFloat(naoPago).toFixed(2), resp[x].qtdeParcelas, qtdeNaoPago];
+
+            lista.push(vetaux);
+        }
+
+        return response.send(lista);
     }
     
     /*async buscarCliente(bd, idConta)

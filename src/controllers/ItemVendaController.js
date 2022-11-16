@@ -9,12 +9,13 @@ class ItemVendaController{
         const {produtos, idVenda} = request.body;
         let resp;
         let msg = "";
-        console.log(produtos);
 
         for(let x=0; x<produtos.length; x++)
-        {   
+        {
             let qtde = parseInt(produtos[x].qtdeEstoque) - parseInt(produtos[x].qtdeSelecionado);
             await ProdutoController.controleEstoque(bd, produtos[x].id, qtde);
+
+            await ProdutoController.atualizarQtdeVendido(bd, produtos[x].id, produtos[x].qtdeSelecionado);
 
             if(parseInt(produtos[x].qtdeSelecionado) > 0)
             {
@@ -23,7 +24,6 @@ class ItemVendaController{
 
                 let itemVenda = new ItemVenda(0, produtos[x].qtdeSelecionado, valor, idVenda, produtos[x].id);
                 await itemVenda.gravar(bd);
-
             }
         }
 
@@ -67,7 +67,16 @@ class ItemVendaController{
         }
     }
 
-    async alterar(request, response)
+    async buscarProduto(request, response)
+    {
+        const {idProduto} = request.params;
+        const itemVenda = new ItemVenda();
+        const resp = await itemVenda.buscarProduto(bd, idProduto);
+
+        return response.send(resp); 
+    }
+
+    /*async alterar(request, response)
     {
         var msg="";
         const {idVenda, dataVenda, idContaReceber, idUsuario, idCliente} = request.body;
@@ -81,9 +90,9 @@ class ItemVendaController{
             msg+="Algo deu errado !!";
         
         return response.send(msg);
-    }
+    }*/
 
-    async deletar(request, response) 
+    /*async deletar(request, response) 
     {
         const {idVenda} = request.params;
         var msg="";
@@ -97,16 +106,7 @@ class ItemVendaController{
             msg+="Algo deu errado !!";
 
         return response.send(msg);
-    }
-
-    async buscarProduto(request, response)
-    {
-        const {idProduto} = request.params;
-        const itemVenda = new ItemVenda();
-        const resp = await itemVenda.buscarProduto(bd, idProduto);
-
-        return response.send(resp); 
-    }
+    }*/
 }
 
 module.exports = new ItemVendaController();

@@ -26,6 +26,18 @@ module.exports = class ContaReceberDAO
         }
     }
 
+    async buscarConta(bd, idConta)
+    {
+        const client = await bd.conectar();
+        try {
+            let res = await client.query('SELECT * from contareceber WHERE id ='+idConta);
+            return res.rows;              
+        }
+        finally{
+            client.release();
+        }
+    }
+
     /*async filtrarContas(bd, filtro)
     {
         try {

@@ -26,6 +26,30 @@ module.exports = class VendaDAO
         }
     }
 
+    async buscarVendasUsuario(bd, idUsuario)
+    {
+        const client = await bd.conectar();
+        try {
+            let res = await client.query('SELECT * from venda WHERE id_usuario ='+idUsuario);
+            return res.rows;              
+        }
+        finally{
+            client.release();
+        }
+    }
+
+    async buscarQtdeVendas(bd, idVenda)
+    {
+        const client = await bd.conectar();
+        try {
+            let res = await client.query('SELECT * from venda WHERE id_cliente='+idVenda);
+            return res.rows;              
+        }
+        finally{
+            client.release();
+        }
+    }
+
     async buscarConta(bd, idConta)
     {
         const client = await bd.conectar();

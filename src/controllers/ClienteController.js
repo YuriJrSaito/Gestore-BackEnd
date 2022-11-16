@@ -1,12 +1,14 @@
 const axios = require('axios');
 const bd = require('../models/Database');
-
 const Cliente = require('../models/Cliente');
 const TelefoneController = require('../controllers/TelefoneController');
 const EnderecoController = require('../controllers/EnderecoController');
+const Telefone = require('../models/Telefone');
+const Venda = require('../models/Venda');
+const ContaReceber = require('../models/ContaReceber');
+const ParcelaControllerCR = require("../controllers/ParcelaContaReceberController");
 
 class ClienteController{
-
     async gravar(request, response)
     {
         const {nome, email, idade, sexo, cpf, telefones, cep, cidade, rua, bairro, numero, complemento} = request.body;
@@ -114,6 +116,54 @@ class ClienteController{
         const resp = await cliente.buscarCPF(bd, idCliente);
 
         return resp; 
+    }
+
+    async relTodosClientes(request, response)
+    {
+        var cliente = new Cliente();
+        const resp = await cliente.listarTodosClientes(bd);
+        let lista = [];
+        
+        for(let x=0; x<resp.length; x++)
+        {
+            var telefoneClass = new Telefone();
+            const telefones = await telefoneClass.buscarTelefone(bd, resp[x].id_telefone);
+            let telefone = telefones[0].telefone1;
+
+            let venda = new Venda();
+            let vendas = await venda.buscarQtdeVendas(bd, resp[x].id);
+            let qtdeVendas = vendas.length;
+
+            let totalGasto = 0;
+            let naoPago = 0;
+            
+            for(let venda of vendas)
+            {
+                let contaReceber = new ContaReceber();
+                let conta = await contaReceber.buscarConta(bd, venda.id_contaReceber);
+
+                let parcelas = await ParcelaControllerCR.buscarParcelas(bd, conta[0].id);
+
+                for(let parcela of parcelas)
+                {
+                    if(parcela.situacao == "Não pago")
+                    {
+                        naoPago = parseFloat(naoPago) + parseFloat(parcela.valor);
+                    }
+                    else
+                    {
+                        totalGasto = parseFloat(totalGasto) + parseFloat(parcela.valorTotal);
+                    }
+                }
+            }
+
+            let vetaux = [resp[x].id.toString(), resp[x].nome, resp[x].cpf, telefone.toString(), qtdeVendas.toString(), 
+            parseFloat(totalGasto).toFixed(2), parseFloat(naoPago).toFixed(2)];
+
+            lista.push(vetaux);
+        }
+
+        return response.send(lista);
     }
 }
 

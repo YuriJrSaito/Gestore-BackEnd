@@ -50,6 +50,21 @@ class ListaCondController{
         return response.send(resp);
     }
 
+    async excluirSemEstoque(request, response)
+    {
+        let msg;
+        const {idVenda} = request.params;
+        
+        let listaCond = new ListaCond();
+        let resp = await listaCond.deletar(bd, idVenda);
+
+        if(resp > 0)
+            resp = true;
+        else
+           resp = false;
+        return response.send(resp);
+    }
+
     async buscarProdutos(request, response)
     {
         const {idVenda} = request.params;
@@ -107,21 +122,11 @@ class ListaCondController{
 
     async devolver(request, response)
     {
-        const {items, idVenda} = request.body;
+        const {items} = request.body;
 
         for(let item of items)
         {
-            let listaCond = new ListaCond();
-            await ProdutoController.devolver(bd, item.id, item.qtdeNoItem);
-
-            if(item.qtdeNoItem == item.qtdeSelecionado)
-            {
-                await listaCond.deletarAlterar(bd, item.id, idVenda);
-            }
-            else
-            {
-                await listaCond.alterarQuantidadeItem(bd, item.itemId, parseInt(item.qtdeNoItem)-parseInt(item.qtdeSelecionado));
-            }
+            await ProdutoController.controleEstoque(bd, item.id, item.qtdeEstoque);
         }
 
         return response.send("Venda atualizada !!");

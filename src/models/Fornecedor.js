@@ -50,6 +50,12 @@ class Fornecedor
         const resp = await new FornecedorDAO().deletar(bd, idFornecedor);
         return resp;
     }
+
+    async buscarFornecedor(bd, idFornecedor)
+    {
+        const resp = await new FornecedorDAO().buscarFornecedor(bd, idFornecedor);
+        return resp;
+    }
 }
 
 module.exports = Fornecedor;

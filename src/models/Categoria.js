@@ -34,9 +34,9 @@ class Categoria
         return resp;
     }
     
-    async buscarPorID(bd, idCargo)
+    async buscarPorID(bd, idCategoria)
     {
-        const resp = await new CategoriaDAO().buscarPorID(bd, idCargo);
+        const resp = await new CategoriaDAO().buscarPorID(bd, idCategoria);
         return resp;
     }
 

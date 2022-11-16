@@ -14,8 +14,9 @@ class Produto
     img1;
     img2;
     img3;
+    qtdeVendido;
 
-    constructor(id, codigoReferencia, qtdeEstoque,titulo, descricao, valorUnitario, valorDeCompra, idCategoria, idFornecedor, img1, img2, img3)
+    constructor(id, codigoReferencia, qtdeEstoque,titulo, descricao, valorUnitario, valorDeCompra, idCategoria, idFornecedor, img1, img2, img3, qtdeVendido)
     {
         this.id = id;
         this.codigoReferencia = codigoReferencia;
@@ -29,6 +30,7 @@ class Produto
         this.img1 = img1;
         this.img2 = img2;
         this.img3 = img3;
+        this.qtdeVendido = qtdeVendido;
     }
 
     async gravar(bd)
@@ -94,6 +96,12 @@ class Produto
     async buscarProduto(bd, idProduto)
     {
         const resp = await new ProdutoDAO().buscarProduto(bd, idProduto);
+        return resp;
+    }
+    
+    async atualizarQtdeVendido(bd, idProduto, quantidade)
+    {
+        const resp = await new ProdutoDAO().atualizarQtdeVendido(bd, idProduto, quantidade);
         return resp;
     }
 }
