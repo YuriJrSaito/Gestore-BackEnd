@@ -26,6 +26,18 @@ module.exports = class ContaPagarDAO
         }
     }
 
+    async buscarContasFornecedor(bd, idFornecedor)
+    {
+        const client = await bd.conectar();
+        try {
+            let res = await client.query('SELECT * from conta_pagar WHERE id_fornecedor ='+idFornecedor);
+            return res.rows;              
+        }
+        finally{
+            client.release();
+        }
+    }
+
     async filtrarContas(bd, filtro)
     {
         const client = await bd.conectar();

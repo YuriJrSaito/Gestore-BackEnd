@@ -60,6 +60,12 @@ class ContaPagar
         const resp = await new ContaPagarDAO().buscarFornecedor(bd, idFornecedor);
         return resp;
     }
+
+    async buscarContasFornecedor(bd, idFornecedor)
+    {
+        const resp = await new ContaPagarDAO().buscarContasFornecedor(bd, idFornecedor);
+        return resp;
+    }
 }
 
 module.exports = ContaPagar;

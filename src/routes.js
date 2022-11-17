@@ -119,5 +119,7 @@ routes.get('/relEstoque', produtoCtrl.relEstoque);
 routes.get('/relCategoriasMaisVendidas', categoriaCtrl.relMaisVendidas);
 routes.get('/relCategoriasMenosVendidas', categoriaCtrl.relMenosVendidas);
 routes.get('/relProdutividadeFuncionarios', usuarioCtrl.relProdutividade);
+routes.get('/relFornecedores', fornecedorCtrl.relFornecedores);
+routes.get('/relProdutosCondicional', vendaCondCtrl.relProdutosCondicional);
 
 module.exports = routes;

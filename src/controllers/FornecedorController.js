@@ -1,6 +1,8 @@
 const bd = require('../models/Database');
 
 const Fornecedor = require('../models/Fornecedor');
+const ContaPagar = require('../models/ContaPagar');
+const ParcelaCP = require('../models/ParcelaContaPagar');
 
 class FornecedorController{
 
@@ -80,6 +82,61 @@ class FornecedorController{
             msg+="Algo deu errado !!";
 
         return response.send(msg); 
+    }
+
+    async relFornecedores(request, response)
+    {
+        let fornecedor = new Fornecedor();
+        let fornecedores = await fornecedor.listarFornecedores(bd);
+
+        let lista = [];
+
+        for(let fornec of fornecedores)
+        {
+            let conta = new ContaPagar();
+            let contas = await conta.buscarContasFornecedor(bd, fornec.id);
+
+            let totalDevendo = 0;
+            let parcelasRestantes = 0;
+
+            if(contas.length > 0)
+            {
+                for(let c of contas)
+                {
+                    let parcela = new ParcelaCP();
+                    let parcelas = await parcela.listarTodasParcelas(bd, c.id);
+                    for(let p of parcelas)
+                    {
+                        if(p.situacao == "Não pago")
+                        {
+                            parcelasRestantes++;
+                            totalDevendo = parseFloat(totalDevendo) + parseFloat(p.valor);
+                        }
+                    }
+                }
+            }
+
+            if(parcelasRestantes == 0)
+            {
+                parcelasRestantes = "---";
+            }
+
+            let cnpj = fornec.CNPJ;
+
+            if(fornec.CNPJ != "" && fornec.CNPJ != null)
+            {
+                var val = await cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+                let metadeCNPJ = val.split(5);
+                cnpj = metadeCNPJ[0] + " " + metadeCNPJ[1];
+            }
+
+            let vetaux = [fornec.id, fornec.nome, cnpj, fornec.email, fornec.telefone1, fornec.telefone2, 
+                        parseFloat(totalDevendo).toFixed(2), parcelasRestantes];
+        
+            lista.push(vetaux);
+        }
+        
+        return response.send(lista);
     }
 }
 

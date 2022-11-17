@@ -3,6 +3,10 @@ const bd = require('../models/Database');
 const Venda = require('../models/VendaCondicional');
 const UsuarioController = require('../controllers/UsuarioController');
 const ClienteController = require("../controllers/ClienteController");
+const VendaCondicional = require('../models/VendaCondicional');
+const ListaCond = require('../models/ListaCondicional');
+const Produto = require('../models/Produto');
+
 const moment = require('moment');
 
 class VendaCondController{
@@ -81,6 +85,43 @@ class VendaCondController{
         const resp = await venda.buscarUsuario(bd, idUsuario);
 
         return response.send(resp); 
+    }
+
+    async relProdutosCondicional(request, response)
+    {
+        let vendaCond = new VendaCondicional();
+        let vendas = await vendaCond.listarTodasVendas(bd);
+
+        let lista = [];
+
+        let produtos = [];
+
+        for(let v of vendas)
+        {
+            let item = new ListaCond();
+            let items = await item.listarTudo(bd, v.id_vendaCondicional);
+
+            for(let i of items)
+            {
+                let res = produtos.find(produtos=>produtos.id == i.id_produto);
+
+                //copiar o produto selecionado algumas informações
+                //buscar se o produto ja esta cadastrado caso ja esteja apenas aumentar a quantidade
+                //caso nao esteja criar esta copia e colocar a quantidade
+                if(res == undefined)
+                {       
+                    let produtoClass = new Produto();
+                    let produto = await produtoClass.buscarProduto(bd, i.id_produto);
+                }
+                else
+                {
+
+                }
+            }
+            
+        }
+
+        return response.send(lista);
     }
 }
 
