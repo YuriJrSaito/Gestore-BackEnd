@@ -6,7 +6,8 @@ const ClienteController = require("../controllers/ClienteController");
 const VendaCondicional = require('../models/VendaCondicional');
 const ListaCond = require('../models/ListaCondicional');
 const Produto = require('../models/Produto');
-
+const Categoria = require('../models/Categoria');
+const Cliente = require('../models/Cliente');
 const moment = require('moment');
 
 class VendaCondController{
@@ -87,38 +88,36 @@ class VendaCondController{
         return response.send(resp); 
     }
 
+    //cadatrar vendas cond e testar o relatorio
     async relProdutosCondicional(request, response)
     {
-        let vendaCond = new VendaCondicional();
-        let vendas = await vendaCond.listarTodasVendas(bd);
+        var vendaCond = new VendaCondicional();
+        var vendas = await vendaCond.listarTodasVendas(bd);
 
-        let lista = [];
-
-        let produtos = [];
+        var lista = [];
 
         for(let v of vendas)
         {
             let item = new ListaCond();
-            let items = await item.listarTudo(bd, v.id_vendaCondicional);
+            let items = await item.listarTudo(bd, v.id);
 
             for(let i of items)
             {
-                let res = produtos.find(produtos=>produtos.id == i.id_produto);
+                let produtoClass = new Produto();
+                let produto = await produtoClass.buscarProduto(bd, i.id_produto);
 
-                //copiar o produto selecionado algumas informações
-                //buscar se o produto ja esta cadastrado caso ja esteja apenas aumentar a quantidade
-                //caso nao esteja criar esta copia e colocar a quantidade
-                if(res == undefined)
-                {       
-                    let produtoClass = new Produto();
-                    let produto = await produtoClass.buscarProduto(bd, i.id_produto);
-                }
-                else
-                {
+                let categoriaClass = new Categoria();
+                let categoria = await categoriaClass.buscarPorID(bd, produto.id_categoria);
+ 
+                let clienteClass = new Cliente();
+                let cliente = await clienteClass.buscarCliente(bd, v.id_cliente);
 
-                }
+                let vetaux = [produto.id, cliente[0].nome,produto.titulo,
+                            categoria[0].descricao, i.quantidade,
+                            moment.utc(v.dataLimite).format('DD-MM-YYYY')];
+
+                lista.push(vetaux);
             }
-            
         }
 
         return response.send(lista);

@@ -30,6 +30,18 @@ module.exports = class ClienteDAO
         }
     }
 
+    async buscarCliente(bd, idCliente)
+    {
+        const client = await bd.conectar();
+        try {
+            let res = await client.query(`SELECT * from cliente where id='${idCliente}'`);
+            return res.rows;              
+        }
+        finally{
+            client.release();
+        }
+    }
+
     async buscarTodos(bd)
     {
         const client = await bd.conectar();

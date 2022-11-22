@@ -1,12 +1,14 @@
 const bd = require('../models/Database');
 const ControleAcesso = require('../models/ControleAcesso');
+const Usuario = require('../models/Usuario');
 
 class ControleAcessoController
 {
     async gravarControleAcesso(bd, login, senha, nivelAcesso, usuarioAtivo)
     {
-        var existe = await this.verificarExiste(bd, login);
-        if(existe != false)
+        var existe = await this.verificarExisteGravar(bd, login);
+        
+        if(existe == false)//não existe ou a alteração é o mesmo usuario
         {
             var controleAcesso = new ControleAcesso(0, login, senha, nivelAcesso, usuarioAtivo);
             const resp = await controleAcesso.gravar(bd);
@@ -20,8 +22,8 @@ class ControleAcessoController
 
     async alterarControleAcesso(bd, idCA, login, senha, nivelAcesso, usuarioAtivo)
     {
-        var existe = await this.verificarExiste(bd, login);
-        if(existe != false)
+        var existe = await this.verificarExisteAlterar(bd, login, idCA);
+        if(existe == false)
         {
             var controleAcesso = new ControleAcesso(idCA, login, senha, nivelAcesso, usuarioAtivo);
             const resp = await controleAcesso.alterar(bd);
@@ -33,15 +35,31 @@ class ControleAcessoController
         }
     }
 
-    async verificarExiste(bd, login)
+    async verificarExisteGravar(bd, login)
     {
         var controleAcesso = new ControleAcesso();
         let resp = await controleAcesso.verificarExiste(bd, login);
+
         if(resp == undefined)
-            resp = 0;
-        if(resp > 0)
-            return false;
+            return false
         return true;
+    }
+
+    async verificarExisteAlterar(bd, login, idCA)
+    {
+        var controleAcesso = new ControleAcesso();
+        let resp = await controleAcesso.verificarExiste(bd, login);
+
+        if(resp != undefined)
+        {
+            if(resp.id == idCA)
+            {
+                return false;
+            }
+            else
+                return true;
+        }
+        return false;
     }
 
     async buscarControleAcesso(request, response)

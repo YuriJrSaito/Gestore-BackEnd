@@ -17,6 +17,7 @@ class UsuarioController{
         var msg = "";
         
         let idCA = await ControleAcessoController.gravarControleAcesso(bd, login, senha, nivelAcesso, true);
+
         if(idCA != false)
         {
             let idTelefone = await TelefoneController.gravarTelefones(bd, telefones);
@@ -45,7 +46,7 @@ class UsuarioController{
         var msg="";
 
         const respCA = await ControleAcessoController.alterarControleAcesso(bd, idCA, login, senha, nivelAcesso, true);
-
+        
         if(respCA != false)
         {
             const respTel = await TelefoneController.alterarTelefone(bd, idTelefone, telefones);

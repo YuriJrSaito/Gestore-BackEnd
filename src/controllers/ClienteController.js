@@ -128,7 +128,14 @@ class ClienteController{
         {
             var telefoneClass = new Telefone();
             const telefones = await telefoneClass.buscarTelefone(bd, resp[x].id_telefone);
-            let telefone = telefones[0].telefone1;
+
+            let telefone;
+
+            if(telefones[0].telefone1 == undefined)
+                telefone = "";
+            else
+                 telefone = telefones[0].telefone1;
+
 
             let venda = new Venda();
             let vendas = await venda.buscarQtdeVendas(bd, resp[x].id);

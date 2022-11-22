@@ -3,7 +3,6 @@ const bd = require('../models/Database');
 const ListaCond = require('../models/ListaCondicional');
 const ProdutoController = require('../controllers/ProdutoController');
 const { request, response } = require('express');
-const req = require('express/lib/request');
 
 class ListaCondController{
     async gravar(request, response)

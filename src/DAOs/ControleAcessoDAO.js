@@ -21,7 +21,7 @@ module.exports = class ControleAcessoDAO
         const client = await bd.conectar();
         try{
             let res = await client.query(`SELECT * from controle_acesso where login='${login}'`);
-            return res.rowCount;              
+            return res.rows[0];              
         }
         finally{
             client.release();
